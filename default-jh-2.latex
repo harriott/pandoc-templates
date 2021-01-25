@@ -1,10 +1,7 @@
 % vim: set fdl=2:
 %
-% 1st adaptation of  \pandoc\data\templates\default.latex  - minimal changes:
-%  blank lines and a couple of comments added to make clauses clearer
-%  spurious blank and empty comment lines removed
-%  some indentation, following existing style
-%  spurious indentations removed
+% adaptation of  $onGH/pandoc-templates/default-jh-1.latex :
+%  indentations fixed
 %
 % Options for packages loaded elsewhere
 \PassOptionsToPackage{unicode$for(hyperrefoptions)$,$hyperrefoptions$$endfor$}{hyperref}
@@ -17,14 +14,14 @@ $endif$
 %
 % script direction
 $if(dir)$
-$if(latex-dir-rtl)$
-\PassOptionsToPackage{RTLdocument}{bidi}
-$endif$
+  $if(latex-dir-rtl)$
+    \PassOptionsToPackage{RTLdocument}{bidi}
+  $endif$
 $endif$
 %
 % CJKmainfont
 $if(CJKmainfont)$
-\PassOptionsToPackage{space}{xeCJK}
+  \PassOptionsToPackage{space}{xeCJK}
 $endif$
 %
 % documentclass
@@ -109,6 +106,9 @@ $if(beamerarticle)$
 \usepackage{beamerarticle} % needs to be loaded first
 $endif$
 %
+% amssymb,amsmath
+\usepackage{amsmath,amssymb}
+%
 % fontfamily
 $if(fontfamily)$
 \usepackage[$for(fontfamilyoptions)$$fontfamilyoptions$$sep$,$endfor$]{$fontfamily$}
@@ -120,9 +120,6 @@ $endif$
 $if(linestretch)$
 \usepackage{setspace}
 $endif$
-%
-% amssymb,amsmath
-\usepackage{amssymb,amsmath}
 %
 % ifxetex,ifluatex
 \usepackage{ifxetex,ifluatex}
@@ -313,40 +310,48 @@ $endif$
 %
 % tables
 $if(tables)$
-\usepackage{longtable,booktabs}
-$if(beamer)$
-\usepackage{caption}
-% Make caption package work with longtable
-\makeatletter
-\def\fnum@table{\tablename~\thetable}
-\makeatother
-$else$
-% Correct order of tables after \paragraph or \subparagraph
-\usepackage{etoolbox}
-\makeatletter
-\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
-\makeatother
-% Allow footnotes in longtable head/foot
-\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
-\makesavenoteenv{longtable}
-$endif$
+  \usepackage{longtable,booktabs,array}
+  %
+  % multirow
+    $if(multirow)$
+    \usepackage{multirow}
+  $endif$
+  %
+  % calc
+  \usepackage{calc} % for calculating minipage widths
+  $if(beamer)$
+    \usepackage{caption}
+    % Make caption package work with longtable
+    \makeatletter
+    \def\fnum@table{\tablename~\thetable}
+    \makeatother
+  $else$
+    % Correct order of tables after \paragraph or \subparagraph
+    \usepackage{etoolbox}
+    \makeatletter
+    \patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+    \makeatother
+    % Allow footnotes in longtable head/foot
+    \IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+    \makesavenoteenv{longtable}
+  $endif$
 $endif$
 %
 % graphics
 $if(graphics)$
-\usepackage{graphicx}
-\makeatletter
-\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
-\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
-\makeatother
-% Scale images if necessary, so that they will not overflow the page
-% margins by default, and it is still possible to overwrite the defaults
-% using explicit options in \includegraphics[width, height, ...]{}
-\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
-% Set default figure placement to htbp
-\makeatletter
-\def\fps@figure{htbp}
-\makeatother
+  \usepackage{graphicx}
+  \makeatletter
+  \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+  \def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+  \makeatother
+  % Scale images if necessary, so that they will not overflow the page
+  % margins by default, and it is still possible to overwrite the defaults
+  % using explicit options in \includegraphics[width, height, ...]{}
+  \setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+  % Set default figure placement to htbp
+  \makeatletter
+  \def\fps@figure{htbp}
+  \makeatother
 $endif$
 %
 % links-as-notes
@@ -357,9 +362,9 @@ $endif$
 %
 % strikeout
 $if(strikeout)$
-\usepackage[normalem]{ulem}
-% Avoid problems with \sout in headers with hyperref
-\pdfstringdefDisableCommands{\renewcommand{\sout}{}}
+  \usepackage[normalem]{ulem}
+  % Avoid problems with \sout in headers with hyperref
+  \pdfstringdefDisableCommands{\renewcommand{\sout}{}}
 $endif$
 %
 % prevent overfull lines
@@ -371,25 +376,25 @@ $endif$
 %
 % numbersections
 $if(numbersections)$
-\setcounter{secnumdepth}{$if(secnumdepth)$$secnumdepth$$else$5$endif$}
+  \setcounter{secnumdepth}{$if(secnumdepth)$$secnumdepth$$else$5$endif$}
 $else$
-\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+  \setcounter{secnumdepth}{-\maxdimen} % remove section numbering
 $endif$
 %
 % beamer
 $if(beamer)$
 $else$
-$if(block-headings)$
-% Make \paragraph and \subparagraph free-standing
-\ifx\paragraph\undefined\else
-  \let\oldparagraph\paragraph
-  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
-\fi
-\ifx\subparagraph\undefined\else
-  \let\oldsubparagraph\subparagraph
-  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
-\fi
-$endif$
+  $if(block-headings)$
+  % Make \paragraph and \subparagraph free-standing
+  \ifx\paragraph\undefined\else
+    \let\oldparagraph\paragraph
+    \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+  \fi
+  \ifx\subparagraph\undefined\else
+    \let\oldsubparagraph\subparagraph
+    \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+  \fi
+  $endif$
 $endif$
 %
 % pagestyle
@@ -407,12 +412,15 @@ $if(lang)$
 \ifxetex
   % Load polyglossia as late as possible: uses bidi with RTL langages (e.g. Hebrew, Arabic)
   \usepackage{polyglossia}
-  \setmainlanguage[$polyglossia-lang.options$]{$polyglossia-lang.name$}
+  \setmainlanguage[$for(polyglossia-lang.options)$$polyglossia-lang.options$$sep$,$endfor$]{$polyglossia-lang.name$}
   $for(polyglossia-otherlangs)$
-  \setotherlanguage[$polyglossia-otherlangs.options$]{$polyglossia-otherlangs.name$}
+    \setotherlanguage[$for(polyglossia-otherlangs.options)$$polyglossia-otherlangs.options$$sep$,$endfor$]{$polyglossia-otherlangs.name$}
   $endfor$
 \else
-  \usepackage[shorthands=off,$for(babel-otherlangs)$$babel-otherlangs$,$endfor$main=$babel-lang$]{babel}
+  \usepackage[$for(babel-otherlangs)$$babel-otherlangs$,$endfor$main=$babel-lang$]{babel}
+  % get rid of language-specific shorthands (see #6817):
+  \let\LanguageShortHands\languageshorthands
+  \def\languageshorthands#1{}
   $if(babel-newcommands)$
     $babel-newcommands$
   $endif$
@@ -452,10 +460,27 @@ $endif$
 $if(csl-refs)$
   \newlength{\cslhangindent}
   \setlength{\cslhangindent}{1.5em}
-  \newenvironment{cslreferences}%
-  {$if(csl-hanging-indent)$\setlength{\parindent}{0pt}%
-  \everypar{\setlength{\hangindent}{\cslhangindent}}\ignorespaces$endif$}%
-  {\par}
+  \newlength{\csllabelwidth}
+  \setlength{\csllabelwidth}{3em}
+  \newenvironment{CSLReferences}[2] % #1 hanging-ident, #2 entry spacing
+  {% don't indent paragraphs
+    \setlength{\parindent}{0pt}
+    % turn on hanging indent if param 1 is 1
+    \ifodd #1 \everypar{\setlength{\hangindent}{\cslhangindent}}\ignorespaces\fi
+    % set entry spacing
+    \ifnum #2 > 0
+      \setlength{\parskip}{#2\baselineskip}
+    \fi
+  }%
+  {}
+  \usepackage{calc}
+  \newcommand{\CSLBlock}[1]{#1\hfill\break}
+  \newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{#1}}
+  \newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{#1}\break}
+  \newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+$endif$
+$if(csquotes)$
+\usepackage{csquotes}
 $endif$
 %
 % title
@@ -501,67 +526,67 @@ $endif$
 %
 % has-frontmatter
 $if(has-frontmatter)$
-\frontmatter
+  \frontmatter
 $endif$
 $if(title)$
-$if(beamer)$
-\frame{\titlepage}
-$else$
-\maketitle
-$endif$
-$if(abstract)$
-\begin{abstract}
-  $abstract$
-\end{abstract}
-$endif$
+  $if(beamer)$
+    \frame{\titlepage}
+  $else$
+    \maketitle
+  $endif$
+  $if(abstract)$
+    \begin{abstract}
+      $abstract$
+    \end{abstract}
+  $endif$
 $endif$
 %
 % include-before
 $for(include-before)$
-$include-before$
+  $include-before$
 $endfor$
 %
 %toc
 $if(toc)$
-$if(toc-title)$
-\renewcommand*\contentsname{$toc-title$}
-$endif$
-$if(beamer)$
-\begin{frame}[allowframebreaks]
   $if(toc-title)$
-  \frametitle{$toc-title$}
+    \renewcommand*\contentsname{$toc-title$}
   $endif$
-  \tableofcontents[hideallsubsections]
-\end{frame}
-$else$
-{
-$if(colorlinks)$
-\hypersetup{linkcolor=$if(toccolor)$$toccolor$$else$$endif$}
-$endif$
-\setcounter{tocdepth}{$toc-depth$}
-\tableofcontents
-}
-$endif$
+  $if(beamer)$
+    \begin{frame}[allowframebreaks]
+      $if(toc-title)$
+      \frametitle{$toc-title$}
+      $endif$
+      \tableofcontents[hideallsubsections]
+    \end{frame}
+  $else$
+    {
+    $if(colorlinks)$
+    \hypersetup{linkcolor=$if(toccolor)$$toccolor$$else$$endif$}
+    $endif$
+    \setcounter{tocdepth}{$toc-depth$}
+    \tableofcontents
+    }
+  $endif$
 $endif$
 %
 % list of tables
 $if(lot)$
-\listoftables
+  \listoftables
 $endif$
 %
 % listoffigures
 $if(lof)$
-\listoffigures
+  \listoffigures
 $endif$
 %
 % linestretch
 $if(linestretch)$
-\setstretch{$linestretch$}
+  \setstretch{$linestretch$}
 $endif$
 %
 % has-frontmatter
 $if(has-frontmatter)$
-\mainmatter
+  \mainmatter
 $endif$
 %
 % body
@@ -569,40 +594,40 @@ $body$
 %
 % has-frontmatter
 $if(has-frontmatter)$
-\backmatter
+  \backmatter
 $endif$
 %
 % natbib
 $if(natbib)$
-$if(bibliography)$
-$if(biblio-title)$
-$if(has-chapters)$
-\renewcommand\bibname{$biblio-title$}
-$else$
-\renewcommand\refname{$biblio-title$}
-$endif$
-$endif$
-$if(beamer)$
-\begin{frame}[allowframebreaks]{$biblio-title$}
-  \bibliographytrue
-$endif$
-\bibliography{$for(bibliography)$$bibliography$$sep$,$endfor$}
-$if(beamer)$
-\end{frame}
-$endif$
-$endif$
+  $if(bibliography)$
+    $if(biblio-title)$
+      $if(has-chapters)$
+        \renewcommand\bibname{$biblio-title$}
+      $else$
+        \renewcommand\refname{$biblio-title$}
+      $endif$
+    $endif$
+    $if(beamer)$
+      \begin{frame}[allowframebreaks]{$biblio-title$}
+        \bibliographytrue
+    $endif$
+    \bibliography{$for(bibliography)$$bibliography$$sep$,$endfor$}
+    $if(beamer)$
+      \end{frame}
+    $endif$
+  $endif$
 $endif$
 %
 % biblatex
 $if(biblatex)$
-$if(beamer)$
-\begin{frame}[allowframebreaks]{$biblio-title$}
-  \bibliographytrue
-  \printbibliography[heading=none]
-\end{frame}
-$else$
-\printbibliography$if(biblio-title)$[title=$biblio-title$]$endif$
-$endif$
+  $if(beamer)$
+    \begin{frame}[allowframebreaks]{$biblio-title$}
+      \bibliographytrue
+      \printbibliography[heading=none]
+    \end{frame}
+  $else$
+    \printbibliography$if(biblio-title)$[title=$biblio-title$]$endif$
+  $endif$
 $endif$
 %
 % include-after
