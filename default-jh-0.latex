@@ -1,6 +1,4 @@
-% vim: set fdl=2:
-%
-% adaptation of  $onGH/pandoc-templates/default.latex :
+%% adaptation of  $onGH/pandoc-templates/default.latex
 %  all indents removed  :%le
 
 % Options for packages loaded elsewhere

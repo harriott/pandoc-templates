@@ -1,30 +1,23 @@
-% vim: set fdl=2:
-%
-% adaptation of  $onGH/pandoc-templates/default-jh-1.latex :
+%% adaptation of  $onGH/pandoc-templates/default-jh-1.latex
 %  indentations fixed
-%
-% Options for packages loaded elsewhere
+%% Options for packages loaded elsewhere
 \PassOptionsToPackage{unicode$for(hyperrefoptions)$,$hyperrefoptions$$endfor$}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
-%
-% colour link text
+%% colour link text
 $if(colorlinks)$
-\PassOptionsToPackage{dvipsnames,svgnames*,x11names*}{xcolor}
+  \PassOptionsToPackage{dvipsnames,svgnames*,x11names*}{xcolor}
 $endif$
-%
-% script direction
+%% script direction
 $if(dir)$
   $if(latex-dir-rtl)$
     \PassOptionsToPackage{RTLdocument}{bidi}
   $endif$
 $endif$
-%
-% CJKmainfont
+%% CJKmainfont
 $if(CJKmainfont)$
   \PassOptionsToPackage{space}{xeCJK}
 $endif$
-%
-% documentclass
+%% documentclass
 \documentclass[
 $if(fontsize)$
   $fontsize$,
@@ -48,80 +41,74 @@ $for(classoption)$
   $classoption$$sep$,
 $endfor$
 ]{$documentclass$}
-%
-% beamer
+%% beamer
 $if(beamer)$
-$if(background-image)$
-\usebackgroundtemplate{%
-  \includegraphics[width=\paperwidth]{$background-image$}%
-}
+  $if(background-image)$
+    \usebackgroundtemplate{%
+      \includegraphics[width=\paperwidth]{$background-image$}%
+    }
+  $endif$
+  \usepackage{pgfpages}
+  \setbeamertemplate{caption}[numbered]
+  \setbeamertemplate{caption label separator}{: }
+  \setbeamercolor{caption name}{fg=normal text.fg}
+  \beamertemplatenavigationsymbols$if(navigation)$$navigation$$else$empty$endif$
+  $for(beameroption)$
+    \setbeameroption{$beameroption$}
+  $endfor$
+  % Prevent slide breaks in the middle of a paragraph
+  \widowpenalties 1 10000
+  \raggedbottom
+  $if(section-titles)$
+  \setbeamertemplate{part page}{
+    \centering
+    \begin{beamercolorbox}[sep=16pt,center]{part title}
+      \usebeamerfont{part title}\insertpart\par
+    \end{beamercolorbox}
+  }
+  \setbeamertemplate{section page}{
+    \centering
+    \begin{beamercolorbox}[sep=12pt,center]{part title}
+      \usebeamerfont{section title}\insertsection\par
+    \end{beamercolorbox}
+  }
+  \setbeamertemplate{subsection page}{
+    \centering
+    \begin{beamercolorbox}[sep=8pt,center]{part title}
+      \usebeamerfont{subsection title}\insertsubsection\par
+    \end{beamercolorbox}
+  }
+  \AtBeginPart{
+    \frame{\partpage}
+  }
+  \AtBeginSection{
+    \ifbibliography
+    \else
+      \frame{\sectionpage}
+    \fi
+  }
+  \AtBeginSubsection{
+    \frame{\subsectionpage}
+  }
+  $endif$
 $endif$
-\usepackage{pgfpages}
-\setbeamertemplate{caption}[numbered]
-\setbeamertemplate{caption label separator}{: }
-\setbeamercolor{caption name}{fg=normal text.fg}
-\beamertemplatenavigationsymbols$if(navigation)$$navigation$$else$empty$endif$
-$for(beameroption)$
-\setbeameroption{$beameroption$}
-$endfor$
-% Prevent slide breaks in the middle of a paragraph
-\widowpenalties 1 10000
-% beamer title pages
-$if(section-titles)$
-\setbeamertemplate{part page}{
-  \centering
-  \begin{beamercolorbox}[sep=16pt,center]{part title}
-    \usebeamerfont{part title}\insertpart\par
-  \end{beamercolorbox}
-}
-\setbeamertemplate{section page}{
-  \centering
-  \begin{beamercolorbox}[sep=12pt,center]{part title}
-    \usebeamerfont{section title}\insertsection\par
-  \end{beamercolorbox}
-}
-\setbeamertemplate{subsection page}{
-  \centering
-  \begin{beamercolorbox}[sep=8pt,center]{part title}
-    \usebeamerfont{subsection title}\insertsubsection\par
-  \end{beamercolorbox}
-}
-\AtBeginPart{
-  \frame{\partpage}
-}
-\AtBeginSection{
-  \ifbibliography
-  \else
-    \frame{\sectionpage}
-  \fi
-}
-\AtBeginSubsection{
-  \frame{\subsectionpage}
-}
-$endif$
-$endif$
-%
-% beamerarticle
+%% beamerarticle
 $if(beamerarticle)$
-\usepackage{beamerarticle} % needs to be loaded first
+  \usepackage{beamerarticle} % needs to be loaded first
 $endif$
-%
-% amssymb,amsmath
+%% amssymb,amsmath
 \usepackage{amsmath,amssymb}
-%
-% fontfamily
+%% fontfamily
 $if(fontfamily)$
-\usepackage[$for(fontfamilyoptions)$$fontfamilyoptions$$sep$,$endfor$]{$fontfamily$}
+  \usepackage[$for(fontfamilyoptions)$$fontfamilyoptions$$sep$,$endfor$]{$fontfamily$}
 $else$
-\usepackage{lmodern}
+  \usepackage{lmodern}
 $endif$
-%
-% linestretch
+%% linestretch
 $if(linestretch)$
 \usepackage{setspace}
 $endif$
-%
-% ifxetex,ifluatex
+%% ifxetex,ifluatex
 \usepackage{ifxetex,ifluatex}
 \ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
   \usepackage[$if(fontenc)$$fontenc$$else$T1$endif$]{fontenc}
@@ -180,8 +167,7 @@ $if(CJKmainfont)$
   \fi
 $endif$
 \fi
-%
-% beamer
+%% beamer
 $if(beamer)$
 $if(theme)$
 \usetheme[$for(themeoptions)$$themeoptions$$sep$,$endfor$]{$theme$}
@@ -202,15 +188,13 @@ $if(outertheme)$
 \useoutertheme{$outertheme$}
 $endif$
 $endif$
-%
-% Use upquote if available, for straight quotes in verbatim environments
+%% Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \IfFileExists{microtype.sty}{% use microtype if available
   \usepackage[$for(microtypeoptions)$$microtypeoptions$$sep$,$endfor$]{microtype}
   \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
 }{}
-%
-% when noindent
+%% when noindent
 $if(indent)$
 $else$
 \makeatletter
@@ -224,22 +208,17 @@ $else$
   \KOMAoptions{parskip=half}}
 \makeatother
 $endif$
-%
-% verbatim-in-note
+%% verbatim-in-note
 $if(verbatim-in-note)$
 \usepackage{fancyvrb}
 $endif$
-%
-% xcolor
+%% xcolor
 \usepackage{xcolor}
-%
-% xurl
+%% xurl
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
-%
-% bookmark
+%% bookmark
 \IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
-%
-% hyersetup
+%% hyersetup
 \hypersetup{
 $if(title-meta)$
   pdftitle={$title-meta$},
@@ -267,57 +246,47 @@ $else$
 $endif$
 pdfcreator={LaTeX via pandoc}
 }
-%
-% disable monospaced font for URLs
+%% disable monospaced font for URLs
 \urlstyle{same}
-%
-% allow verbatim text in footnotes
+%% allow verbatim text in footnotes
 $if(verbatim-in-note)$
-\VerbatimFootnotes
+  \VerbatimFootnotes
 $endif$
-%
-% geometry
+%% geometry
 $if(geometry)$
+  $if(beamer)$
+    \geometry{$for(geometry)$$geometry$$sep$,$endfor$}
+  $else$
+    \usepackage[$for(geometry)$$geometry$$sep$,$endfor$]{geometry}
+  $endif$
+$endif$
+%% beamer
 $if(beamer)$
-\geometry{$for(geometry)$$geometry$$sep$,$endfor$}
-$else$
-\usepackage[$for(geometry)$$geometry$$sep$,$endfor$]{geometry}
+  \newif\ifbibliography
 $endif$
-$endif$
-%
-% beamer
-$if(beamer)$
-\newif\ifbibliography
-$endif$
-%
-% listings
+%% listings
 $if(listings)$
-\usepackage{listings}
-\newcommand{\passthrough}[1]{#1}
-\lstset{defaultdialect=[5.3]Lua}
-\lstset{defaultdialect=[x86masm]Assembler}
+  \usepackage{listings}
+  \newcommand{\passthrough}[1]{#1}
+  \lstset{defaultdialect=[5.3]Lua}
+  \lstset{defaultdialect=[x86masm]Assembler}
 $endif$
-%
-% lhs
+%% lhs
 $if(lhs)$
-\lstnewenvironment{code}{\lstset{language=Haskell,basicstyle=\small\ttfamily}}{}
+  \lstnewenvironment{code}{\lstset{language=Haskell,basicstyle=\small\ttfamily}}{}
 $endif$
-%
-% highlighting-macros
+%% highlighting-macros
 $if(highlighting-macros)$
-$highlighting-macros$
+  $highlighting-macros$
 $endif$
-%
-% tables
+%% tables
 $if(tables)$
   \usepackage{longtable,booktabs,array}
-  %
-  % multirow
+  %% multirow
     $if(multirow)$
     \usepackage{multirow}
   $endif$
-  %
-  % calc
+  %% calc
   \usepackage{calc} % for calculating minipage widths
   $if(beamer)$
     \usepackage{caption}
@@ -336,8 +305,7 @@ $if(tables)$
     \makesavenoteenv{longtable}
   $endif$
 $endif$
-%
-% graphics
+%% graphics
 $if(graphics)$
   \usepackage{graphicx}
   \makeatletter
@@ -353,35 +321,29 @@ $if(graphics)$
   \def\fps@figure{htbp}
   \makeatother
 $endif$
-%
-% links-as-notes
+%% links-as-notes
 $if(links-as-notes)$
 % Make links footnotes instead of hotlinks:
 \DeclareRobustCommand{\href}[2]{#2\footnote{\url{#1}}}
 $endif$
-%
-% strikeout
+%% strikeout
 $if(strikeout)$
   \usepackage[normalem]{ulem}
   % Avoid problems with \sout in headers with hyperref
   \pdfstringdefDisableCommands{\renewcommand{\sout}{}}
 $endif$
-%
-% prevent overfull lines
+%% prevent overfull lines
 \setlength{\emergencystretch}{3em}
-%
-% tightlist
+%% tightlist
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-%
-% numbersections
+%% numbersections
 $if(numbersections)$
   \setcounter{secnumdepth}{$if(secnumdepth)$$secnumdepth$$else$5$endif$}
 $else$
   \setcounter{secnumdepth}{-\maxdimen} % remove section numbering
 $endif$
-%
-% beamer
+%% beamer
 $if(beamer)$
 $else$
   $if(block-headings)$
@@ -396,18 +358,15 @@ $else$
   \fi
   $endif$
 $endif$
-%
-% pagestyle
+%% pagestyle
 $if(pagestyle)$
 \pagestyle{$pagestyle$}
 $endif$
-%
-% header-includes
+%% header-includes
 $for(header-includes)$
 $header-includes$
 $endfor$
-%
-% lang
+%% lang
 $if(lang)$
 \ifxetex
   % Load polyglossia as late as possible: uses bidi with RTL langages (e.g. Hebrew, Arabic)
@@ -426,8 +385,10 @@ $if(lang)$
   $endif$
 \fi
 $endif$
-%
-% script direction
+\ifluatex
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+%% script direction
 $if(dir)$
 \ifxetex
   % Load bidi as late as possible as it modifies e.g. graphicx
@@ -441,22 +402,19 @@ $if(dir)$
   \newenvironment{LTR}{\beginL}{\endL}
 \fi
 $endif$
-%
-% natbib
+%% natbib
 $if(natbib)$
 \usepackage[$natbiboptions$]{natbib}
 \bibliographystyle{$if(biblio-style)$$biblio-style$$else$plainnat$endif$}
 $endif$
-%
-% biblatex
+%% biblatex
 $if(biblatex)$
 \usepackage[$if(biblio-style)$style=$biblio-style$,$endif$$for(biblatexoptions)$$biblatexoptions$$sep$,$endfor$]{biblatex}
 $for(bibliography)$
 \addbibresource{$bibliography$}
 $endfor$
 $endif$
-%
-% csl-refs
+%% csl-refs
 $if(csl-refs)$
   \newlength{\cslhangindent}
   \setlength{\cslhangindent}{1.5em}
@@ -482,13 +440,11 @@ $endif$
 $if(csquotes)$
 \usepackage{csquotes}
 $endif$
-%
-% title
+%% title
 $if(title)$
 \title{$title$$if(thanks)$\thanks{$thanks$}$endif$}
 $endif$
-%
-% subtitle
+%% subtitle
 $if(subtitle)$
 $if(beamer)$
 $else$
@@ -501,14 +457,11 @@ $else$
 $endif$
 \subtitle{$subtitle$}
 $endif$
-%
-% author
+%% author
 \author{$for(author)$$author$$sep$ \and $endfor$}
-%
-% date
+%% date
 \date{$date$}
-%
-% beamer
+%% beamer
 $if(beamer)$
 $if(institute)$
 \institute{$for(institute)$$institute$$sep$ \and $endfor$}
@@ -520,11 +473,9 @@ $if(logo)$
 \logo{\includegraphics{$logo$}}
 $endif$
 $endif$
-%
-% document
+%% document
 \begin{document}
-%
-% has-frontmatter
+%% has-frontmatter
 $if(has-frontmatter)$
   \frontmatter
 $endif$
@@ -540,13 +491,11 @@ $if(title)$
     \end{abstract}
   $endif$
 $endif$
-%
-% include-before
+%% include-before
 $for(include-before)$
   $include-before$
 $endfor$
-%
-%toc
+%% toc
 $if(toc)$
   $if(toc-title)$
     \renewcommand*\contentsname{$toc-title$}
@@ -568,36 +517,29 @@ $if(toc)$
     }
   $endif$
 $endif$
-%
-% list of tables
+%% list of tables
 $if(lot)$
   \listoftables
 $endif$
-%
-% listoffigures
+%% listoffigures
 $if(lof)$
   \listoffigures
 $endif$
-%
-% linestretch
+%% linestretch
 $if(linestretch)$
   \setstretch{$linestretch$}
 $endif$
-%
-% has-frontmatter
+%% has-frontmatter
 $if(has-frontmatter)$
   \mainmatter
 $endif$
-%
-% body
+%% body
 $body$
-%
-% has-frontmatter
+%% has-frontmatter
 $if(has-frontmatter)$
   \backmatter
 $endif$
-%
-% natbib
+%% natbib
 $if(natbib)$
   $if(bibliography)$
     $if(biblio-title)$
@@ -617,8 +559,7 @@ $if(natbib)$
     $endif$
   $endif$
 $endif$
-%
-% biblatex
+%% biblatex
 $if(biblatex)$
   $if(beamer)$
     \begin{frame}[allowframebreaks]{$biblio-title$}
@@ -629,12 +570,9 @@ $if(biblatex)$
     \printbibliography$if(biblio-title)$[title=$biblio-title$]$endif$
   $endif$
 $endif$
-%
-% include-after
+%% include-after
 $for(include-after)$
   $include-after$
 $endfor$
-%
-% ends
+%% ends
 \end{document}
-%
