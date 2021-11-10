@@ -1,5 +1,6 @@
 %% adaptation of  default-jh-2.latex
 %  removed calls to xcolor
+%  used in  defaults yaml
 %% Options for packages loaded elsewhere
 \PassOptionsToPackage{unicode$for(hyperrefoptions)$,$hyperrefoptions$$endfor$}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
