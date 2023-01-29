@@ -1,9 +1,11 @@
-%% adaptation of  $onGH/pandoc-templates/default.latex
+$-- adaptation of  default.latex - see  $MD4PDF/defaults.yaml
 %  all indents removed  :%le
+%  disabled default call to  xcolor
 
 % Options for packages loaded elsewhere
 \PassOptionsToPackage{unicode$for(hyperrefoptions)$,$hyperrefoptions$$endfor$}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
+%% colour link text - seems conflictual
 $if(colorlinks)$
 \PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
 $endif$
@@ -220,7 +222,7 @@ $endif$
 $if(verbatim-in-note)$
 \usepackage{fancyvrb}
 $endif$
-\usepackage{xcolor}
+% \usepackage{xcolor}
 $if(geometry)$
 $if(beamer)$
 \geometry{$for(geometry)$$geometry$$sep$,$endfor$}
@@ -347,7 +349,15 @@ $if(lang)$
 \else
 \usepackage[bidi=default]{babel}
 \fi
+$if(babel-lang)$
 \babelprovide[main,import]{$babel-lang$}
+$if(mainfont)$
+\ifPDFTeX
+\else
+\babelfont[$babel-lang$]{rm}{$mainfont$}
+\fi
+$endif$
+$endif$
 $for(babel-otherlangs)$
 \babelprovide[import]{$babel-otherlangs$}
 $endfor$
@@ -421,7 +431,7 @@ urlcolor={$if(urlcolor)$$urlcolor$$else$Blue$endif$},
 $else$
 $if(boxlinks)$
 $else$
-  hidelinks,
+hidelinks,
 $endif$
 $endif$
 pdfcreator={LaTeX via pandoc}}

@@ -1,10 +1,10 @@
-%% adaptation of  $onGH/pandoc-templates/default-jh-0.latex
+$-- adaptation of  defaultJH0.latex - see  $MD4PDF/defaults.yaml
 %  no blank lines
 %  more comments
 %% Options for packages loaded elsewhere
 \PassOptionsToPackage{unicode$for(hyperrefoptions)$,$hyperrefoptions$$endfor$}{hyperref}
 \PassOptionsToPackage{hyphens}{url}
-%% colour link text
+%% colour link text - seems conflictual
 $if(colorlinks)$
 \PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
 $endif$
@@ -90,14 +90,10 @@ $if(beamerarticle)$
 $endif$
 %% amssymb,amsmath
 \usepackage{amsmath,amssymb}
-$if(fontfamily)$
-\usepackage[$for(fontfamilyoptions)$$fontfamilyoptions$$sep$,$endfor$]{$fontfamily$}
-$else$
-\usepackage{lmodern}
-$endif$
 $if(linestretch)$
 \usepackage{setspace}
 $endif$
+%% iftex
 \usepackage{iftex}
 \ifPDFTeX
 \usepackage[$if(fontenc)$$fontenc$$else$T1$endif$]{fontenc}
@@ -106,15 +102,48 @@ $endif$
 \else % if luatex or xetex
 $if(mathspec)$
 \ifXeTeX
-\usepackage{mathspec}
+\usepackage{mathspec} % this also loads fontspec
 \else
-\usepackage{unicode-math}
+\usepackage{unicode-math} % this also loads fontspec
 \fi
 $else$
-\usepackage{unicode-math}
+\usepackage{unicode-math} % this also loads fontspec
 $endif$
-\defaultfontfeatures{Scale=MatchLowercase}
+\defaultfontfeatures{Scale=MatchLowercase}$-- must come before Beamer theme
 \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+$if(fontfamily)$
+$else$
+$-- Set default font before Beamer theme so the theme can override it
+\usepackage{lmodern}
+$endif$
+$-- Set Beamer theme before user font settings so they can override theme
+$if(beamer)$
+$if(theme)$
+\usetheme[$for(themeoptions)$$themeoptions$$sep$,$endfor$]{$theme$}
+$endif$
+$if(colortheme)$
+\usecolortheme{$colortheme$}
+$endif$
+$if(fonttheme)$
+\usefonttheme{$fonttheme$}
+$endif$
+$if(mainfont)$
+\usefonttheme{serif} % use mainfont rather than sansfont for slide text
+$endif$
+$if(innertheme)$
+\useinnertheme{$innertheme$}
+$endif$
+$if(outertheme)$
+\useoutertheme{$outertheme$}
+$endif$
+$endif$
+$-- User font settings (must come after default font and Beamer theme)
+$if(fontfamily)$
+\usepackage[$for(fontfamilyoptions)$$fontfamilyoptions$$sep$,$endfor$]{$fontfamily$}
+$endif$
+\ifPDFTeX\else
+% xetex/luatex font selection
 $if(mainfont)$
 \setmainfont[$for(mainfontoptions)$$mainfontoptions$$sep$,$endfor$]{$mainfont$}
 $endif$
@@ -158,7 +187,7 @@ $endif$
 \fi
 %% zero-width
 $if(zero-width-non-joiner)$
-% Support for zero-width non-joiner characters.
+%% Support for zero-width non-joiner characters.
 \makeatletter
 \def\zerowidthnonjoiner{%
 % Prevent ligatures and adjust kerning, but still support hyphenating.
@@ -174,30 +203,9 @@ $if(zero-width-non-joiner)$
 \catcode`^^^^200c=\active
 \protected\def ^^^^200c{\zerowidthnonjoiner}
 \fi
-% End of ZWNJ support
+%% End of ZWNJ support
 $endif$
-%% beamer
-$if(beamer)$
-$if(theme)$
-\usetheme[$for(themeoptions)$$themeoptions$$sep$,$endfor$]{$theme$}
-$endif$
-$if(colortheme)$
-\usecolortheme{$colortheme$}
-$endif$
-$if(fonttheme)$
-\usefonttheme{$fonttheme$}
-$endif$
-$if(mainfont)$
-\usefonttheme{serif} % use mainfont rather than sansfont for slide text
-$endif$
-$if(innertheme)$
-\useinnertheme{$innertheme$}
-$endif$
-$if(outertheme)$
-\useoutertheme{$outertheme$}
-$endif$
-$endif$
-%% Use upquote if available, for straight quotes in verbatim environments
+% Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \IfFileExists{microtype.sty}{% use microtype if available
 \usepackage[$for(microtypeoptions)$$microtypeoptions$$sep$,$endfor$]{microtype}
@@ -222,7 +230,7 @@ $if(verbatim-in-note)$
 \usepackage{fancyvrb}
 $endif$
 %% xcolor
-\usepackage{xcolor}
+% \usepackage{xcolor}
 %% xurl
 $if(geometry)$
 $if(beamer)$
@@ -292,8 +300,13 @@ $if(graphics)$
 \def\fps@figure{htbp}
 \makeatother
 $endif$
+$if(svg)$
+\usepackage{svg}
+$endif$
+%% strikeout
 $if(strikeout)$
-\usepackage[normalem]{ulem}
+$-- also used for underline
+\usepackage{soul}
 $endif$
 %% prevent overfull lines
 \setlength{\emergencystretch}{3em} % prevent overfull lines
@@ -305,6 +318,9 @@ $if(numbersections)$
 \setcounter{secnumdepth}{$if(secnumdepth)$$secnumdepth$$else$5$endif$}
 $else$
 \setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+$endif$
+$if(subfigure)$
+\usepackage{subcaption}
 $endif$
 %% beamer
 $if(beamer)$
@@ -358,7 +374,15 @@ $if(lang)$
 \else
 \usepackage[bidi=default]{babel}
 \fi
+$if(babel-lang)$
 \babelprovide[main,import]{$babel-lang$}
+$if(mainfont)$
+\ifPDFTeX
+\else
+\babelfont[$babel-lang$]{rm}{$mainfont$}
+\fi
+$endif$
+$endif$
 $for(babel-otherlangs)$
 \babelprovide[import]{$babel-otherlangs$}
 $endfor$
@@ -369,6 +393,7 @@ $endif$
 $for(header-includes)$
 $header-includes$
 $endfor$
+%% LuaTeX
 \ifLuaTeX
 \usepackage{selnolig}  % disable illegal ligatures
 \fi
@@ -404,7 +429,7 @@ $if(csquotes)$
 $endif$
 \IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
-\urlstyle{same} % disable monospaced font for URLs
+\urlstyle{$if(urlstyle)$$urlstyle$$else$same$endif$}
 $if(links-as-notes)$
 % Make links footnotes instead of hotlinks:
 \DeclareRobustCommand{\href}[2]{#2\footnote{\url{#1}}}
@@ -434,10 +459,11 @@ linkcolor={$if(linkcolor)$$linkcolor$$else$Maroon$endif$},
 filecolor={$if(filecolor)$$filecolor$$else$Maroon$endif$},
 citecolor={$if(citecolor)$$citecolor$$else$Blue$endif$},
 urlcolor={$if(urlcolor)$$urlcolor$$else$Blue$endif$},
-$endif$
+$else$
 $if(boxlinks)$
 $else$
 hidelinks,
+$endif$
 $endif$
 pdfcreator={LaTeX via pandoc}}
 $if(title)$
@@ -520,6 +546,9 @@ $endif$
 %% list of figures
 $if(lof)$
 \listoffigures
+$endif$
+$if(lot)$
+\listoftables
 $endif$
 %% linestretch
 $if(linestretch)$
