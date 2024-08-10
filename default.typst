@@ -9,6 +9,11 @@ $definitions.typst()$
     .join()
 }
 
+#set table(
+  inset: 6pt,
+  stroke: none
+)
+
 $if(template)$
 #import "$template$": conf
 $else$
@@ -19,6 +24,9 @@ $endif$
 $if(title)$
   title: [$title$],
 $endif$
+$if(subtitle)$
+  subtitle: [$subtitle$],
+$endif$
 $if(author)$
   authors: (
 $for(author)$
@@ -28,11 +36,14 @@ $if(author.name)$
       email: [$author.email$] ),
 $else$
     ( name: [$author$],
-      affiliation: [],
-      email: [] ),
+      affiliation: "",
+      email: "" ),
 $endif$
 $endfor$
     ),
+$endif$
+$if(keywords)$
+  keywords: ($for(keywords)$$keyword$$sep$,$endfor$),
 $endif$
 $if(date)$
   date: [$date$],
@@ -76,14 +87,17 @@ $endfor$
 $if(toc)$
 #outline(
   title: auto,
-  depth: none
+  depth: $toc-depth$
 );
 $endif$
 
 $body$
 
 $if(citations)$
-$if(bibliographystyle)$
+$if(csl)$
+
+#set bibliography(style: "$csl$")
+$elseif(bibliographystyle)$
 
 #set bibliography(style: "$bibliographystyle$")
 $endif$
