@@ -1,12 +1,17 @@
 vim: se fdl=3:
 
+    $onGH/pandoc-templates/README.markdown
+
   1. this is my ([harriott](https://github.com/harriott)) fork of **[jgm/pandoc-templates](https://github.com/jgm/pandoc-templates)** - see therein for GPL license details
   1. jgm's general usage notes: [Templates](https://pandoc.org/MANUAL.html#templates)
   1. my only adaptation here is of `default.latex` for my [md4pdf/defaults.yaml](https://github.com/harriott/md4pdf/blob/master/defaults.yaml)
 Grab this repository with `GitHub CLI`: `gh repo clone pandoc-templates`.
 
 ## my maintenance routine
-1) `rsync -irtv --delete $onGH/pandoc-templates/ $DJH/pandoc-templates-backup`
+1) Backup:
+
+    rsync -irtv --delete $onGH/pandoc-templates/ $DJH/pandoc-templates-backup
+    robocopy /mir $onGH/pandoc-templates/ $DJH/pandoc-templates-backup
 
 2) in `$onGH/pandoc-templates`, get jgm `upstream` and merge:
 
